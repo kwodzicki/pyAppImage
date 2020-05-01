@@ -10,7 +10,8 @@ from . import PREFIX, LOCAL
 CONFIG             = ConfigParser()
 CONFIG.optionxform = str
 
-PNGEXT     = '.png'
+PNGEXT      = '.png'
+DESKTOP     = '.desktop'
 
 getSquashfs = lambda root: os.path.join( root, 'squashfs-root' )
 getUsrDir   = lambda root: os.path.join( root, 'usr' )
@@ -27,7 +28,7 @@ def extract( path ):
   proc = Popen(cmd, cwd = dirname, stdout = DEVNULL, stderr = STDOUT)
   proc.wait()
   if proc.returncode != 0:
-    log.error( 'Error extracting AppImage : {}'.foramt(path) )
+    log.error( 'Error extracting AppImage : {}'.format(path) )
     squashfs = None 
 
   return path, squashfs
@@ -38,7 +39,7 @@ def getLauncherIcon( squashfs ):
   desktop = None
   icon    = None
   for item in os.listdir( squashfs ):
-    if item.endswith('.desktop') and not desktop:
+    if item.endswith( DESKTOP ) and not desktop:
       desktop = os.path.join( squashfs, item )
     elif item.endswith( PNGEXT ) and not icon:
       icon    = os.path.join( squashfs, item )
@@ -47,7 +48,7 @@ def getLauncherIcon( squashfs ):
   if desktop:
     CONFIG.read( desktop )
   else:
-    log.error( 'Missing .desktop file' )
+    log.error( "Missing '{}' file".format(DESKTOP) )
 
   return desktop, icon 
 
