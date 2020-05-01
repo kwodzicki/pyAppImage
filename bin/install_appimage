@@ -1,0 +1,7 @@
+#!/usr/bin/env python3
+if __name__ == "__main__":
+  import sys
+  from appimage.utils import install
+  status = install( sys.argv[1] )
+  if not status:
+    print('Error installing!')

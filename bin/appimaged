@@ -1,0 +1,24 @@
+#!/usr/bin/env python3
+
+import logging
+from logging.handlers import RotatingFileHandler
+import os, signal
+
+from appimage import LOGDIR, log, appimaged
+
+logFile   = os.path.join(LOGDIR, '{}.log'.format('appimaged'))
+
+formatter = logging.Formatter( '%(asctime)s [%(levelname)-.4s] %(message)s' )
+handler   = RotatingFileHandler(logFile, maxBytes = 5 * 1024**2, backupCount = 4)
+handler.setFormatter( formatter )
+handler.setLevel( logging.DEBUG )
+
+log.addHandler( handler )
+
+
+inst = appimaged.AppImaged()
+signal.signal(signal.SIGINT,  inst.stop)
+signal.signal(signal.SIGTERM, inst.stop)
+
+inst.join()
+
