@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import logging
 
-import os, shutil
+import os, stat, shutil
 from configparser import ConfigParser
 from subprocess import Popen, STDOUT, DEVNULL
 
@@ -24,6 +24,8 @@ def extract( path ):
   squashfs = getSquashfs( dirname )
 
   log.info('Extracting AppImage : {}'.format(path))
+  st = os.stat(path)
+  os.chmod( path, st.st_mode | stat.S_IEXEC )                                   # Ensure the file is executable
   cmd  = [path, '--appimage-extract']
   proc = Popen(cmd, cwd = dirname, stdout = DEVNULL, stderr = STDOUT)
   proc.wait()
