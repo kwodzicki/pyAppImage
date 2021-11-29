@@ -42,12 +42,15 @@ class AppImaged( FileSystemEventHandler ):
           self.__log.info('AppImage created/modified : {}'.format(path))
 
   def on_created(self, event):
+    self.__log.debug('File created event: {}'.format(event) )
     self.processEvent(event)
 
   def on_modified(self, event):
+    self.__log.debug('File modified event: {}'.format(event) )
     self.processEvent(event)
 
   def join(self, *args, **kwargs):
+    self.__log.debug('Joining watchdog observer')
     self.Observer.join()
 
   def stop(self, *args, **kwargs):
